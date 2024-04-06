@@ -38,6 +38,11 @@ jobs:
   BUILD: 
     needs: [TAG_IMAGE]
     runs-on: self-hosted
+    env: 
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: eu-central-1
+      AWS_DEFAULT_OUTPUT: json
     steps:
       - name: Checkout Code 
         if: github.event.pull_request.base.ref == 'master'
@@ -51,15 +56,13 @@ jobs:
 
       - name: Push Image 
         if: github.event.pull_request.base.ref == 'master'
-        run: |
-          aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 790178318219.dkr.ecr.eu-central-1.amazonaws.com
-          docker push "$(grep -A0 'repository:' chart/values.yaml | tail -n1 | awk '{ print $2}')":"$(grep -A0 'tag:' chart/values.yaml | tail -n1 | awk '{ print $2}')"
+        run: docker push "$(grep -A0 'repository:' chart/values.yaml | tail -n1 | awk '{ print $2}')":"$(grep -A0 'tag:' chart/values.yaml | tail -n1 | awk '{ print $2}')"
 
       - name: Remove local Image
         if: github.event.pull_request.base.ref == 'master'
         run: docker rmi -f "$(grep -A0 'repository:' chart/values.yaml | tail -n1 | awk '{ print $2}')":"$(grep -A0 'tag:' chart/values.yaml | tail -n1 | awk '{ print $2}')"
   
-  DEPLOY_TO_master:
+  DEPLOY_TO_STAGING:
     needs: [TAG_IMAGE, BUILD]
     runs-on: self-hosted
     steps:
@@ -74,5 +77,7 @@ jobs:
       
       - name: Deploy via argocd sync
         if: github.event.pull_request.base.ref == 'master'
-        run: argocd app sync hello-privilee
+        run: |
+          argocd app sync hello-privilee
+          argocd app sync hello-privilee
         
