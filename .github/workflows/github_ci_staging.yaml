@@ -2,7 +2,7 @@
 name: workflow staging
 on:
   pull_request:
-    branches: [staging]
+    branches: [master]
     types: [closed]
 
 jobs:
@@ -12,27 +12,27 @@ jobs:
       - name: checkout repo
         uses: actions/checkout@v3
         with:
-          ref: 'staging'
+          ref: 'master'
 
       - name: tag version in files
-        if: github.event.pull_request.base.ref == 'staging'
+        if: github.event.pull_request.base.ref == 'master'
         run: |
           sed -i "s/^\(\s*appVersion\s*:\s*\).*/\1$GITHUB_SHA/" chart/Chart.yaml 
           sed -i "s/^\(\s*tag\s*:\s*\).*/\1$GITHUB_SHA/" chart/values.yaml
           sed -i "s/^\(\s*tag\s*:\s*\).*/\1$GITHUB_SHA/" chart/values_prod.yaml
 
       # - name: Commit files
-      #   if: github.event.pull_request.base.ref == 'staging'
+      #   if: github.event.pull_request.base.ref == 'master'
       #   run: |
       #     git config --global user.name "Jlacerna"
       #     git config --global user.email "lacernajoshua00002828@gmail.com"
       #     git commit -am "Bump Application container version: $GITHUB_SHA"
 
       # - name: Push changes
-      #   if: github.event.pull_request.base.ref == 'staging'
+      #   if: github.event.pull_request.base.ref == 'master'
       #   uses: ad-m/github-push-action@master
       #   with:
-      #     branch: staging
+      #     branch: master
       #     github_token: ${{ secrets.PUSHONLY_TOKEN }}
 
   BUILD: 
@@ -40,37 +40,37 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Checkout Code 
-        if: github.event.pull_request.base.ref == 'staging'
+        if: github.event.pull_request.base.ref == 'master'
         uses: actions/checkout@v3
         with:
-          ref: 'staging'
+          ref: 'master'
 
       - name: Build Image 
-        if: github.event.pull_request.base.ref == 'staging'
+        if: github.event.pull_request.base.ref == 'master'
         run: docker build -t "$(grep -A0 'repository:' chart/values.yaml | tail -n1 | awk '{ print $2}')":"$(grep -A0 'tag:' chart/values.yaml | tail -n1 | awk '{ print $2}')" -f build/docker/Dockerfile .
 
       - name: Push Image 
-        if: github.event.pull_request.base.ref == 'staging'
+        if: github.event.pull_request.base.ref == 'master'
         run: docker push "$(grep -A0 'repository:' chart/values.yaml | tail -n1 | awk '{ print $2}')":"$(grep -A0 'tag:' chart/values.yaml | tail -n1 | awk '{ print $2}')"
 
       - name: Remove local Image
-        if: github.event.pull_request.base.ref == 'staging'
+        if: github.event.pull_request.base.ref == 'master'
         run: docker rmi -f "$(grep -A0 'repository:' chart/values.yaml | tail -n1 | awk '{ print $2}')":"$(grep -A0 'tag:' chart/values.yaml | tail -n1 | awk '{ print $2}')"
   
-  DEPLOY_TO_STAGING:
+  DEPLOY_TO_master:
     needs: [TAG_IMAGE, BUILD]
     runs-on: self-hosted
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
         with:
-          ref: 'staging'
+          ref: 'master'
       
       - name: Budget time delay
-        if: github.event.pull_request.base.ref == 'staging'
+        if: github.event.pull_request.base.ref == 'master'
         run: sleep 10
       
       - name: Deploy via argocd sync
-        if: github.event.pull_request.base.ref == 'staging'
+        if: github.event.pull_request.base.ref == 'master'
         run: argocd app sync hello-privilee
         
