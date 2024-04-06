@@ -56,9 +56,7 @@ jobs:
 
       - name: Push Image 
         if: github.event.pull_request.base.ref == 'master'
-        run: |
-          aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 790178318219.dkr.ecr.eu-central-1.amazonaws.com
-          docker push "$(grep -A0 'repository:' chart/values.yaml | tail -n1 | awk '{ print $2}')":"$(grep -A0 'tag:' chart/values.yaml | tail -n1 | awk '{ print $2}')"
+        run: docker push "$(grep -A0 'repository:' chart/values.yaml | tail -n1 | awk '{ print $2}')":"$(grep -A0 'tag:' chart/values.yaml | tail -n1 | awk '{ print $2}')"
 
       - name: Remove local Image
         if: github.event.pull_request.base.ref == 'master'
