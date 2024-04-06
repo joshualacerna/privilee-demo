@@ -1,9 +1,9 @@
-FROM golang:1.22 
+FROM --platform=linux/amd64 golang:1.22 
 
 ENV GO111MODULE=on \
     CGO_ENABLED=0 \
     GOOS=linux \
-    GOARCH=arm64
+    GOARCH=amd64
     
 RUN apt-get install -y
 
