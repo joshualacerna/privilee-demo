@@ -6,34 +6,34 @@ on:
     types: [closed]
 
 jobs:
-  # TAG_IMAGE:
-  #   runs-on: self-hosted
-  #   steps:
-  #     - name: checkout repo
-  #       uses: actions/checkout@v3
-  #       with:
-  #         ref: 'staging'
+  TAG_IMAGE:
+    runs-on: self-hosted
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v3
+        with:
+          ref: 'staging'
 
-  #     - name: tag version in files
-  #       if: github.event.pull_request.base.ref == 'staging'
-  #       run: |
-  #         sed -i "s/^\(\s*appVersion\s*:\s*\).*/\1$GITHUB_SHA/" chart/Chart.yaml 
-  #         sed -i "s/^\(\s*tag\s*:\s*\).*/\1$GITHUB_SHA/" chart/values.yaml
-  #         sed -i "s/^\(\s*tag\s*:\s*\).*/\1$GITHUB_SHA/" chart/values_prod.yaml
+      - name: tag version in files
+        if: github.event.pull_request.base.ref == 'staging'
+        run: |
+          sed -i "s/^\(\s*appVersion\s*:\s*\).*/\1$GITHUB_SHA/" chart/Chart.yaml 
+          sed -i "s/^\(\s*tag\s*:\s*\).*/\1$GITHUB_SHA/" chart/values.yaml
+          sed -i "s/^\(\s*tag\s*:\s*\).*/\1$GITHUB_SHA/" chart/values_prod.yaml
 
-  #     - name: Commit files
-  #       if: github.event.pull_request.base.ref == 'staging'
-  #       run: |
-  #         git config --global user.name "Jlacerna"
-  #         git config --global user.email "lacernajoshua00002828@gmail.com"
-  #         git commit -am "Bump Application container version: $GITHUB_SHA"
+      # - name: Commit files
+      #   if: github.event.pull_request.base.ref == 'staging'
+      #   run: |
+      #     git config --global user.name "Jlacerna"
+      #     git config --global user.email "lacernajoshua00002828@gmail.com"
+      #     git commit -am "Bump Application container version: $GITHUB_SHA"
 
-  #     - name: Push changes
-  #       if: github.event.pull_request.base.ref == 'staging'
-  #       uses: ad-m/github-push-action@master
-  #       with:
-  #         branch: staging
-  #         github_token: ${{ secrets.PUSHONLY_TOKEN }}
+      # - name: Push changes
+      #   if: github.event.pull_request.base.ref == 'staging'
+      #   uses: ad-m/github-push-action@master
+      #   with:
+      #     branch: staging
+      #     github_token: ${{ secrets.PUSHONLY_TOKEN }}
 
   BUILD: 
     # needs: [TAG_IMAGE]
