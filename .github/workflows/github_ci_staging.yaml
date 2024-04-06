@@ -80,6 +80,5 @@ jobs:
       - name: Deploy via argocd sync
         if: github.event.pull_request.base.ref == 'master'
         run: |
-          argocd app sync hello-privilee
-          argocd app sync hello-privilee
+          argocd app sync privilee-demo
         
