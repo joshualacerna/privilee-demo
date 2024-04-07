@@ -6,7 +6,7 @@ on:
     types: [closed]
 
 jobs: 
-  PROJECT_BUILD: 
+  BUILD_PROJECT: 
     runs-on: self-hosted
     steps:
       - name: Checkout Code 
@@ -22,7 +22,8 @@ jobs:
           go mod tidy
           go build
 
-  TEST: 
+  TEST_PROJECT: 
+    needs: [BUILD_PROJECT]
     runs-on: self-hosted
     steps:
       - name: Checkout Code 
@@ -35,7 +36,8 @@ jobs:
         if: github.event.pull_request.base.ref == 'master'
         run: go test
 
-  TAG_IMAGE AND DOCKER BUILD:
+  TAG_IMAGE_AND_DOCKER_BUILD:
+    needs: [BUILD_PROJECT, TEST_PROJECT]
     runs-on: self-hosted
     env: 
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -84,7 +86,7 @@ jobs:
         run: docker rmi -f "$(grep -A0 'repository:' chart/values.yaml | tail -n1 | awk '{ print $2}')":"$(grep -A0 'tag:' chart/values.yaml | tail -n1 | awk '{ print $2}')"
   
   DEPLOY:
-    needs: [TAG_IMAGE, BUILD]
+    needs: [TAG_IMAGE_AND_DOCKER_BUILD, BUILD_PROJECT, TEST_PROJECT]
     runs-on: self-hosted
     steps:
       - name: Checkout Code
