@@ -20,4 +20,4 @@ version: 0.1.0
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application. Versions are not expected to
 # follow Semantic Versioning. They should reflect the version the application is using.
-appVersion: c31e6724b61aa6638b00355bc1f15ac8ba3addad
+appVersion: 677110b1de435aeae4f2b218324ace1ada00254c
