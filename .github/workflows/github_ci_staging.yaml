@@ -5,6 +5,9 @@ on:
     branches: [master]
     types: [closed]
 
+permissions:
+  contents: write
+
 jobs: 
   BUILD_AND_TEST: 
     runs-on: self-hosted
@@ -59,7 +62,6 @@ jobs:
           git commit chart/ -m "Bump Application container version: $GITHUB_SHA"
 
       - name: Push changes
-        permissions: write-all
         if: github.event.pull_request.base.ref == 'master'
         uses: ad-m/github-push-action@master
         with:
