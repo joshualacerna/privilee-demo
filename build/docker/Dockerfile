@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 golang:1.22 
+FROM golang:1.22 
 
 ENV GO111MODULE=on \
     CGO_ENABLED=0 \
