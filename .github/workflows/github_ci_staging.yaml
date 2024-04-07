@@ -6,7 +6,25 @@ on:
     types: [closed]
 
 jobs:
-  TAG_IMAGE:
+  TEST: 
+    needs: [TAG_IMAGE]
+    runs-on: self-hosted
+    steps:
+      - name: Checkout Code 
+        if: github.event.pull_request.base.ref == 'master'
+        uses: actions/checkout@v3
+        with:
+          ref: 'master'
+
+      - name: local test and build
+        if: github.event.pull_request.base.ref == 'master'
+        run: |
+          go mod init hello-privilee
+          go mod tidy
+          go build
+          go test
+
+  TAG_IMAGE :
     runs-on: self-hosted
     steps:
       - name: checkout repo
@@ -17,23 +35,23 @@ jobs:
       - name: tag version in files
         if: github.event.pull_request.base.ref == 'master'
         run: |
-          sed -i "s/^\(\s*appVersion\s*:\s*\).*/\1$GITHUB_SHA/" chart/Chart.yaml 
+          sed -i "s/^\(\s*appVersion\s*:\s*\).*/\1$GITHUB_SHA/" chart/Chart.yaml
           sed -i "s/^\(\s*tag\s*:\s*\).*/\1$GITHUB_SHA/" chart/values.yaml
           sed -i "s/^\(\s*tag\s*:\s*\).*/\1$GITHUB_SHA/" chart/values_prod.yaml
 
-      # - name: Commit files
-      #   if: github.event.pull_request.base.ref == 'master'
-      #   run: |
-      #     git config --global user.name "Jlacerna"
-      #     git config --global user.email "lacernajoshua00002828@gmail.com"
-      #     git commit -am "Bump Application container version: $GITHUB_SHA"
+      - name: Commit files
+        if: github.event.pull_request.base.ref == 'master'
+        run: |
+          git config --global user.name "Jlacerna"
+          git config --global user.email "lacernajoshua00002828@gmail.com"
+          git commit chart/ -m "Bump Application container version: $GITHUB_SHA"
 
-      # - name: Push changes
-      #   if: github.event.pull_request.base.ref == 'master'
-      #   uses: ad-m/github-push-action@master
-      #   with:
-      #     branch: master
-      #     github_token: ${{ secrets.PUSHONLY_TOKEN }}
+      - name: Push changes
+        if: github.event.pull_request.base.ref == 'master'
+        uses: ad-m/github-push-action@master
+        with:
+          branch: master
+          github_token: ${{ secrets.PUSHONLY_TOKEN }}
 
   BUILD: 
     needs: [TAG_IMAGE]
