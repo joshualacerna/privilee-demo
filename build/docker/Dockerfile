@@ -11,10 +11,10 @@ WORKDIR /hello-privilee
 
 COPY . /hello-privilee
 
-# RUN go mod init hello-privilee
+RUN go mod init hello-privilee
 
-# RUN go mod tidy && \
-#     go build
+RUN go mod tidy && \
+    go build
 
 EXPOSE 1323
 
