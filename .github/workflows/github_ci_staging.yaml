@@ -59,6 +59,8 @@ jobs:
           git commit chart/ -m "Bump Application container version: $GITHUB_SHA"
 
       - name: Push changes
+        permissions:
+          contents: write
         if: github.event.pull_request.base.ref == 'master'
         uses: ad-m/github-push-action@master
         with:
