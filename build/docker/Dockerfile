@@ -16,7 +16,7 @@ RUN go mod init hello-privilee
 RUN go mod tidy && \
     go build
 
-EXPOSE 80
+EXPOSE 1323
 
 # Run
 CMD ["go", "run", "hello-privilee"]
