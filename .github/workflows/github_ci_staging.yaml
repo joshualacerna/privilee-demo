@@ -5,9 +5,8 @@ on:
     branches: [master]
     types: [closed]
 
-jobs:
-  TEST: 
-    needs: [TAG_IMAGE]
+jobs: 
+  PROJECT_BUILD: 
     runs-on: self-hosted
     steps:
       - name: Checkout Code 
@@ -16,16 +15,33 @@ jobs:
         with:
           ref: 'master'
 
-      - name: local test and build
+      - name: local build
         if: github.event.pull_request.base.ref == 'master'
         run: |
           go mod init hello-privilee
           go mod tidy
           go build
-          go test
 
-  TAG_IMAGE :
+  TEST: 
     runs-on: self-hosted
+    steps:
+      - name: Checkout Code 
+        if: github.event.pull_request.base.ref == 'master'
+        uses: actions/checkout@v3
+        with:
+          ref: 'master'
+
+      - name: local test
+        if: github.event.pull_request.base.ref == 'master'
+        run: go test
+
+  TAG_IMAGE AND DOCKER BUILD:
+    runs-on: self-hosted
+    env: 
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: eu-central-1
+      AWS_DEFAULT_OUTPUT: json
     steps:
       - name: checkout repo
         uses: actions/checkout@v3
@@ -52,37 +68,22 @@ jobs:
         with:
           branch: master
           github_token: ${{ secrets.PUSHONLY_TOKEN }}
-
-  BUILD: 
-    needs: [TAG_IMAGE]
-    runs-on: self-hosted
-    env: 
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_DEFAULT_REGION: eu-central-1
-      AWS_DEFAULT_OUTPUT: json
-    steps:
-      - name: Checkout Code 
-        if: github.event.pull_request.base.ref == 'master'
-        uses: actions/checkout@v3
-        with:
-          ref: 'master'
-
+# BUILD
       - name: Build Image 
         if: github.event.pull_request.base.ref == 'master'
         run: docker build -t "$(grep -A0 'repository:' chart/values.yaml | tail -n1 | awk '{ print $2}')":"$(grep -A0 'tag:' chart/values.yaml | tail -n1 | awk '{ print $2}')" -f build/docker/Dockerfile .
 
-      - name: Push Image 
+      - name: Push Image
         if: github.event.pull_request.base.ref == 'master'
         run: |
           aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 790178318219.dkr.ecr.eu-central-1.amazonaws.com
           docker push "$(grep -A0 'repository:' chart/values.yaml | tail -n1 | awk '{ print $2}')":"$(grep -A0 'tag:' chart/values.yaml | tail -n1 | awk '{ print $2}')"
 
-      - name: Remove local Image
+      - name: Clean local Image
         if: github.event.pull_request.base.ref == 'master'
         run: docker rmi -f "$(grep -A0 'repository:' chart/values.yaml | tail -n1 | awk '{ print $2}')":"$(grep -A0 'tag:' chart/values.yaml | tail -n1 | awk '{ print $2}')"
   
-  DEPLOY_TO_STAGING:
+  DEPLOY:
     needs: [TAG_IMAGE, BUILD]
     runs-on: self-hosted
     steps:
