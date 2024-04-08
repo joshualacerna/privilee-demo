@@ -14,3 +14,4 @@ spec:
       name: http
   selector:
     {{- include "golang.selectorLabels" . | nindent 4 }}
+
