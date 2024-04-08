@@ -41,6 +41,7 @@ service:
   port: 1323
 
 ingress:
+  enabled: true
   routes:
     - match: PathPrefix(`/`)
       kind: Rule
