@@ -11,8 +11,8 @@ image:
   tag: cb88a68053f8f16fec029c0a4944e84832114d9f
 
 imagePullSecrets: []
-nameOverride: ""
-fullnameOverride: ""
+nameOverride: "privilee-demo-golang"
+fullnameOverride: "privilee-demo-golang"
 
 serviceAccount:
   # Specifies whether a service account should be created
