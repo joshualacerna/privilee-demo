@@ -112,16 +112,18 @@ jobs:
       - name: Budget time delay
         if: contains(github.ref, 'master')
         run: sleep 10
+
+      - name: Deploy to Bahrain via argocd sync
+        if: ${{ inputs.deploy_to_Bahrain == true || inputs.deploy_to_Bahrain == 'true' }}
+        run: |
+          argocd app sync privilee-demo
       
       - name: Deploy to Ireland via argocd sync
         if: ${{ inputs.deploy_to_Ireland == true || inputs.deploy_to_Ireland == 'true' }}
         run: |
           argocd app sync privilee-demo
 
-      - name: Deploy to Bahrain via argocd sync
-        if: ${{ inputs.deploy_to_Bahrain == true || inputs.deploy_to_Bahrain == 'true' }}
-        run: |
-          argocd app sync privilee-demo
+
 
           
 
