@@ -2,10 +2,11 @@
 apiVersion: traefik.io/v1alpha1
 kind: Ingress
 metadata:
-  name: {{ $fullName }}
+  name: {{ include "golang.fullname" . }}
   namespace: {{ .Values.namespace.name }}
 spec:
   {{- with .Values.ingress.routes }}
   routes:
     {{- toYaml . | nindent 4 }}
     {{- end }}
+  {{- end }}
