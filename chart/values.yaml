@@ -38,7 +38,8 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 1323
+  targetPort: 1323
+  port: 80
 
 ingress:
   enabled: true
@@ -50,7 +51,7 @@ ingress:
       - name: redirect
       services:
       - name: privilee-demo-golang
-        port: 1323
+        port: 80
   # enabled: true
   # annotations: {}
   #   # kubernetes.io/ingress.class: nginx
