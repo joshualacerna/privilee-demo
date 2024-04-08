@@ -114,12 +114,12 @@ jobs:
         run: sleep 10
       
       - name: Deploy to Ireland via argocd sync
-        if: ${{ contains(github.ref, 'master') && (inputs.deploy_to_Ireland == true || inputs.deploy_to_Ireland == 'true') }}
+        if: ${{ inputs.deploy_to_Ireland == true || inputs.deploy_to_Ireland == 'true' }}
         run: |
           argocd app sync privilee-demo
 
       - name: Deploy to Bahrain via argocd sync
-        if: ${{ contains(github.ref, 'master') && (inputs.deploy_to_Ireland == true || inputs.deploy_to_Ireland == 'true') }}
+        if: ${{ inputs.deploy_to_Ireland == true || inputs.deploy_to_Ireland == 'true' }}
         run: |
           argocd app sync privilee-demo
 
