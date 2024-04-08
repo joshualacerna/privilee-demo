@@ -31,13 +31,13 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Checkout Code 
-        if: contains(github.ref, "master")
+        if: contains(github.ref, 'master')
         uses: actions/checkout@v3
         with:
           ref: 'master'
 
       - name: local build
-        if: contains(github.ref, "master")
+        if: contains(github.ref, 'master')
         run: |
           go mod init hello-privilee
           go mod tidy
@@ -66,38 +66,38 @@ jobs:
           ref: 'master'
 
       - name: tag version in files
-        if: contains(github.ref, "master")
+        if: contains(github.ref, 'master')
         run: |
           sed -i "s/^\(\s*appVersion\s*:\s*\).*/\1$GITHUB_SHA/" chart/Chart.yaml
           sed -i "s/^\(\s*tag\s*:\s*\).*/\1$GITHUB_SHA/" chart/values.yaml
           sed -i "s/^\(\s*tag\s*:\s*\).*/\1$GITHUB_SHA/" chart/values_prod.yaml
 
       - name: Commit files
-        if: contains(github.ref, "master")
+        if: contains(github.ref, 'master')
         run: |
           git config --global user.name "Jlacerna"
           git config --global user.email "lacernajoshua00002828@gmail.com"
           git commit chart/ -m "Bump Application container version: $GITHUB_SHA"
 
       - name: Push changes
-        if: contains(github.ref, "master")
+        if: contains(github.ref, 'master')
         uses: ad-m/github-push-action@master
         with:
           branch: master
           github_token: ${{ secrets.PUSHONLY_TOKEN }}
 # BUILD
       - name: Build Image 
-        if: contains(github.ref, "master")
+        if: contains(github.ref, 'master')
         run: docker build -t "$(grep -A0 'repository:' chart/values.yaml | tail -n1 | awk '{ print $2}')":"$(grep -A0 'tag:' chart/values.yaml | tail -n1 | awk '{ print $2}')" -f build/docker/Dockerfile .
 
       - name: Push Image
-        if: contains(github.ref, "master")
+        if: contains(github.ref, 'master')
         run: |
           aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 790178318219.dkr.ecr.eu-central-1.amazonaws.com
           docker push "$(grep -A0 'repository:' chart/values.yaml | tail -n1 | awk '{ print $2}')":"$(grep -A0 'tag:' chart/values.yaml | tail -n1 | awk '{ print $2}')"
 
       - name: Clean local Image
-        if: contains(github.ref, "master")
+        if: contains(github.ref, 'master')
         run: docker rmi -f "$(grep -A0 'repository:' chart/values.yaml | tail -n1 | awk '{ print $2}')":"$(grep -A0 'tag:' chart/values.yaml | tail -n1 | awk '{ print $2}')"
   
   DEPLOY:
@@ -110,16 +110,16 @@ jobs:
           ref: 'master'
 
       - name: Budget time delay
-        if: contains(github.ref, "master")
+        if: contains(github.ref, 'master')
         run: sleep 10
       
       - name: Deploy to Ireland via argocd sync
-        if: contains(github.ref, "master") && ${{ inputs.deploy_to_Ireland == true || inputs.deploy_to_Ireland == 'true' }}
+        if: contains(github.ref, 'master') && ${{ inputs.deploy_to_Ireland == true || inputs.deploy_to_Ireland == 'true' }}
         run: |
           argocd app sync privilee-demo
 
       - name: Deploy to Bahrain via argocd sync
-        if: contains(github.ref, "master") && ${{ inputs.deploy_to_Bahrain == true || inputs.deploy_to_Bahrain == 'true' }}
+        if: contains(github.ref, 'master') && ${{ inputs.deploy_to_Bahrain == true || inputs.deploy_to_Bahrain == 'true' }}
         run: |
           argocd app sync privilee-demo
 
