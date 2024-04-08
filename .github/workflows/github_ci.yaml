@@ -119,7 +119,7 @@ jobs:
           argocd app sync privilee-demo
 
       - name: Deploy to Bahrain via argocd sync
-        if: ${{ inputs.deploy_to_Ireland == true || inputs.deploy_to_Ireland == 'true' }}
+        if: ${{ inputs.deploy_to_Bahrain == true || inputs.deploy_to_Bahrain == 'true' }}
         run: |
           argocd app sync privilee-demo
 
