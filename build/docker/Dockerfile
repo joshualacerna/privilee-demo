@@ -11,6 +11,8 @@ WORKDIR /hello-privilee
 
 COPY . /hello-privilee
 
+RUN chmod +x zone.sh
+
 RUN go mod init hello-privilee
 
 RUN go mod tidy && \
