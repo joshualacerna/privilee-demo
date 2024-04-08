@@ -1,9 +1,9 @@
 ---
 name: workflow staging
 on:
-  pull_request:
-    branches: [master]
-    types: [closed]
+  # pull_request:
+  #   branches: [master]
+  #   types: [closed]
   workflow_dispatch:
     inputs:
       deploy_to_Ireland:
