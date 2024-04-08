@@ -48,7 +48,7 @@ ingress:
       kind: Rule
       middlewares:
       - name: ratelimit
-      - name: redirect
+      # - name: redirect
       services:
       - name: privilee-demo-golang
         port: 80
