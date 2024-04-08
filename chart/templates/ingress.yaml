@@ -4,8 +4,6 @@ kind: IngressRoute
 metadata:
   name: {{ include "golang.fullname" . }}
   namespace: {{ .Values.namespace.name }}
-  annotations:
-    kubernetes.io/ingress.class: "traefik-external"
 spec:
   {{- with .Values.ingress.routes }}
   routes:
