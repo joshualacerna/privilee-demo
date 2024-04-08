@@ -4,6 +4,23 @@ on:
   pull_request:
     branches: [master]
     types: [closed]
+  workflow_dispatch:
+    inputs:
+      deploy_to_Ireland:
+        type: choice
+        required: true
+        default: 'true'
+        options:
+          - true
+          - false
+      deploy_to_Bahrain:
+        description: "deplot to me-south-1"
+        type: choice
+        required: true
+        default: 'true'
+        options:
+          - true
+          - false
 
 permissions:
   contents: write
@@ -86,17 +103,31 @@ jobs:
     needs: [BUILD_AND_TEST, TAG_IMAGE_AND_DOCKER_BUILD]
     runs-on: self-hosted
     steps:
+      - name: Wait for approval
+        uses: trstringer/manual-approval@v1
+        with:
+          secret: ${{ steps.generate_token.outputs.token }}
+          approvers: myteam
+          minimum-approvals: 1
       - name: Checkout Code
         uses: actions/checkout@v3
         with:
           ref: 'master'
-      
+
       - name: Budget time delay
         if: github.event.pull_request.base.ref == 'master'
         run: sleep 10
       
-      - name: Deploy via argocd sync
-        if: github.event.pull_request.base.ref == 'master'
+      - name: Deploy to Ireland via argocd sync
+        if: github.event.pull_request.base.ref == 'master' && ${{ inputs.deploy_to_Ireland == true || inputs.deploy_to_Ireland == 'true' }}
         run: |
           argocd app sync privilee-demo
+
+      - name: Deploy to Bahrain via argocd sync
+        if: github.event.pull_request.base.ref == 'master' && ${{ inputs.deploy_to_Ireland == true || inputs.deploy_to_Ireland == 'true' }}
+        run: |
+          argocd app sync privilee-demo
+
+          
+
         
