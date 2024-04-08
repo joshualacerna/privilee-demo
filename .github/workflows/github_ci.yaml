@@ -116,12 +116,12 @@ jobs:
       - name: Deploy to Ireland via argocd sync
         if: ${{ inputs.deploy_to_Ireland == true || inputs.deploy_to_Ireland == 'true' }}
         run: |
-          argocd app sync privilee-demo
+          argocd app sync privilee-demo-eu-central-1
 
       - name: Deploy to Bahrain via argocd sync
         if: ${{ inputs.deploy_to_Bahrain == true || inputs.deploy_to_Bahrain == 'true' }}
         run: |
-          argocd app sync privilee-demo
+          argocd app sync privilee-demo-me-south-1
 
           
 
