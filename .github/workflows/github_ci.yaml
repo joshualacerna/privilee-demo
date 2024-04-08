@@ -103,12 +103,6 @@ jobs:
     needs: [BUILD_AND_TEST, TAG_IMAGE_AND_DOCKER_BUILD]
     runs-on: self-hosted
     steps:
-      - name: Wait for approval
-        uses: trstringer/manual-approval@v1
-        with:
-          secret: ${{ steps.generate_token.outputs.token }}
-          approvers: myteam
-          minimum-approvals: 1
       - name: Checkout Code
         uses: actions/checkout@v3
         with:
