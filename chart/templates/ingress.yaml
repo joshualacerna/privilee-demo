@@ -1,6 +1,6 @@
 {{- if .Values.ingress.enabled -}}
 apiVersion: traefik.io/v1alpha1
-kind: Ingress
+kind: IngressRoute
 metadata:
   name: {{ include "golang.fullname" . }}
   namespace: {{ .Values.namespace.name }}
