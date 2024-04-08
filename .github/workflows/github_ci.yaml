@@ -118,7 +118,7 @@ jobs:
           argocd app sync privilee-demo
 
       - name: Deploy to Bahrain via argocd sync
-        if: contains(github.ref, "release") && ${{ inputs.deploy_to_Ireland == true || inputs.deploy_to_Ireland == 'true' }}
+        if: contains(github.ref, "release") && ${{ inputs.deploy_to_Bahrain == true || inputs.deploy_to_Bahrain == 'true' }}
         run: |
           argocd app sync privilee-demo
 
