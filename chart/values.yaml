@@ -9,10 +9,10 @@ image:
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
 <<<<<<< HEAD
-  tag: ca311b53b4a8cda92ad7eb936b1719abfb7061d1
+  tag: 279f9c7a1cfe4c83227915ba2bdffd88ac24ecea
   args: ["go", "run", "hello-privilee"]
 =======
-  tag: 0ee47c245495713da287204d37a8ed8e84f51248
+  tag: 279f9c7a1cfe4c83227915ba2bdffd88ac24ecea
   args: ["go run hello-privilee"]
 >>>>>>> 9b0f435280963f77b8a5043f3a13e2cabd66cec5
 

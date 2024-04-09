@@ -8,7 +8,7 @@ image:
   repository: gcr.io/continuous-integration-332721/service-golang
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: 0ee47c245495713da287204d37a8ed8e84f51248
+  tag: 279f9c7a1cfe4c83227915ba2bdffd88ac24ecea
 
 imagePullSecrets: []
 nameOverride: ""
