@@ -9,7 +9,7 @@ image:
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ca311b53b4a8cda92ad7eb936b1719abfb7061d1
-  args: ["go run hello-privilee"]
+  args: ["go", "run", "hello-privilee"]
 
 imagePullSecrets: []
 nameOverride: "privilee-demo-golang"

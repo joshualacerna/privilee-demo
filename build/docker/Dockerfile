@@ -3,7 +3,8 @@ FROM golang:1.22
 ENV GO111MODULE=on \
     CGO_ENABLED=0 \
     GOOS=linux \
-    GOARCH=amd64
+    GOARCH=amd64 \
+    GOPATH=/hello-privilee
     
 RUN apt-get install -y
 
@@ -21,4 +22,4 @@ RUN go mod tidy && \
 EXPOSE 1323
 
 # Run
-CMD ["go", "run", "hello-privilee"]
+# CMD ["go", "run", "hello-privilee"]
