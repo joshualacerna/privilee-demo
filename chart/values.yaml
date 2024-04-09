@@ -44,7 +44,7 @@ service:
 ingress:
   enabled: true
   routes:
-    - match: Host(`hello-privilee.cloudlogicdemo.com`) && PathPrefix(`/`)
+    - match: PathPrefix(`/`)
       kind: Rule
       middlewares:
       - name: ratelimit
