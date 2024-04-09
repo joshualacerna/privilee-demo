@@ -21,4 +21,4 @@ RUN go mod tidy && \
 EXPOSE 1323
 
 # Run
-CMD ["go", "run", "hello-privilee"]
+# CMD ["go", "run", "hello-privilee"]
