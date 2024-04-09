@@ -8,13 +8,8 @@ image:
   repository: 790178318219.dkr.ecr.eu-central-1.amazonaws.com/service-go_lang
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-<<<<<<< HEAD
   tag: 279f9c7a1cfe4c83227915ba2bdffd88ac24ecea
   args: ["go", "run", "hello-privilee"]
-=======
-  tag: 279f9c7a1cfe4c83227915ba2bdffd88ac24ecea
-  args: ["go run hello-privilee"]
->>>>>>> 9b0f435280963f77b8a5043f3a13e2cabd66cec5
 
 imagePullSecrets: []
 nameOverride: "privilee-demo-golang"
