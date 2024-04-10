@@ -89,7 +89,7 @@ https://github.com/joshualacerna/privilee-demo/actions/runs/8621203594
 
 There is a terraform repo used to deploy the underlying infrastructure for both regions.
 
-Visit this repository for the IAC code **(TERRAFORM)** of infrastruture.
+Visit this [repository](https://github.com/joshualacerna/privilee-demo-infrastructure) for the IAC code **(TERRAFORM)**  infrastruture.
 
 # Helm Chart Templates for Go in Kubernetes
 
