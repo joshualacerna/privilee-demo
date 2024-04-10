@@ -73,7 +73,7 @@ We also have the option on wether to deploy the application to specific region.
 
 The worflow steps are:
 
-```BUILD_AND_TEST ---> TAG_IMAGE_AND_DOCKER_BUILD ---> DEPLOY**```
+```BUILD_AND_TEST ---> TAG_IMAGE_AND_DOCKER_BUILD ---> DEPLOY```
 
 BUILD_AND_TEST: will locally build the image and perform testing.
 
