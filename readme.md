@@ -62,6 +62,7 @@ ARGOCD : Kubernetes application management AND Deployment
 TRAEFIK : Ingress Controller or Reverse Proxy
 ```
 
+
 # WORKFLOWS
 
 ![WORKFLOWS](photos/workflows.png)
@@ -83,6 +84,9 @@ DEPLOY: will deploy the application service in **KUBERNETES**.
 Example of a worflow run: 
 
 https://github.com/joshualacerna/privilee-demo/actions/runs/8621203594
+
+### APPLICATION INFRASTRUCTURE
+![APP_INFRA](photos/app-infra.jpeg)
 
 
 # Infrastructure
